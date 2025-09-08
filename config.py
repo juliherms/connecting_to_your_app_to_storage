@@ -1,16 +1,44 @@
 import os
+from dotenv import load_dotenv
+
+# Carrega as variáveis de ambiente do arquivo .env
+load_dotenv()
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-class Config(object):
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'secret-key'
 
-    SQL_SERVER = os.environ.get('SQL_SERVER') or '[SQL_SERVER_GOES_HERE]'
-    SQL_DATABASE = os.environ.get('SQL_DATABASE') or '[SQL_DATABASE_GOES_HERE]'
-    SQL_USER_NAME = os.environ.get('SQL_USER_NAME') or '[SQL_USER_NAME_GOES_HERE]'
-    SQL_PASSWORD = os.environ.get('SQL_PASSWORD') or '[SQL_PASSWORD_GOES_HERE]'
-    SQLALCHEMY_DATABASE_URI = 'mssql+pyodbc://' + SQL_USER_NAME + '@' + SQL_SERVER + ':' + SQL_PASSWORD + '@' + SQL_SERVER + ':1433/' + SQL_DATABASE + '?driver=ODBC+Driver+17+for+SQL+Server'
+class Config(object):
+    """
+    Classe de configuração da aplicação Flask.
+    Carrega configurações de variáveis de ambiente com fallback para valores padrão.
+    """
+    
+    # Configurações de Segurança
+    SECRET_KEY = os.getenv('SECRET_KEY')
+
+    # Configurações do Banco de Dados SQL Server
+    SQL_SERVER = os.getenv('SQL_SERVER')
+    SQL_DATABASE = os.getenv('SQL_DATABASE')
+    SQL_USER_NAME = os.getenv('SQL_USER_NAME')
+    SQL_PASSWORD = os.getenv('SQL_PASSWORD')
+    
+    # Construção da URI de conexão do SQLAlchemy
+    SQLALCHEMY_DATABASE_URI = (
+        f'mssql+pyodbc://{SQL_USER_NAME}:{SQL_PASSWORD}@{SQL_SERVER}:1433/'
+        f'{SQL_DATABASE}?driver=ODBC+Driver+17+for+SQL+Server&'
+        f'trustServerCertificate=no&encrypt=yes'
+    )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    BLOB_ACCOUNT = os.environ.get('BLOB_ACCOUNT') or '[BLOB_ACCOUNT_GOES_HERE]'
-    BLOB_STORAGE_KEY = os.environ.get('BLOB_STORAGE_KEY') or '[BLOB_STORAGE_KEY_GOES_HERE]'
-    BLOB_CONTAINER = os.environ.get('BLOB_CONTAINER') or '[BLOB_CONTAINER_GOES_HERE]'
+    # Configurações do Azure Blob Storage
+    BLOB_ACCOUNT = os.getenv('BLOB_ACCOUNT')
+    BLOB_STORAGE_KEY = os.getenv('BLOB_STORAGE_KEY')
+    BLOB_CONTAINER = os.getenv('BLOB_CONTAINER')
+
+    @classmethod
+    def init_app(cls, app):
+        """
+        Inicializa a aplicação Flask com as configurações.
+        Pode ser usado para configurações específicas de ambiente.
+        """
+        pass

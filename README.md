@@ -5,11 +5,31 @@ to your earlier deployed SQL database and Blob Storage to populate the zoo appli
 
 If you already closed down your database and blob storage, you'll want to go back and re-create them before getting started.
 
+## Setup
+
+1. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Configure environment variables:**
+   - Copy the example environment file: `cp env.example .env`
+   - Edit the `.env` file with your actual configuration values:
+     - `SECRET_KEY`: Your Flask secret key
+     - `SQL_SERVER`: Your SQL Server hostname
+     - `SQL_DATABASE`: Your database name
+     - `SQL_USER_NAME`: Your database username
+     - `SQL_PASSWORD`: Your database password
+     - `BLOB_ACCOUNT`: Your Azure Blob Storage account name
+     - `BLOB_STORAGE_KEY`: Your Azure Blob Storage key
+     - `BLOB_CONTAINER`: Your blob container name
+
+## Exercise Steps
+
 1. First, familiarize yourself at least with the `views.py` file in the `FlaskExercise` directly, although you may also want to check out the other files. You can see an example screenshot of the deployed application below.
     <br><img src="example-connected-app.png" width="500" />
-2. Next, add the necessary environment variables to connect to the SQL database in `config.py`.
-3. Then, add the necessary environment variables to connect to the Blob storage container in `config.py`.
-4. Add the necessary code in `models.py` to work with the `BlobServiceClient` to upload new images and delete any images that are replaced.
+2. The environment variables are already configured in `config.py` to load from the `.env` file.
+3. Add the necessary code in `models.py` to work with the `BlobServiceClient` to upload new images and delete any images that are replaced.
 4. Run the app on your local machine, and check that the animals are correctly populated from the SQL database. Make sure you add the data from the scripts in the [sql_scripts](https://video.udacity-data.com/topher/2020/July/5f075d26_sql-scripts/sql-scripts.zip) directory here to the database. 
 5. Add some images for each animal. You should be able to check back in your blob container and see that new images were added, and they should populate back to the main page.
 
